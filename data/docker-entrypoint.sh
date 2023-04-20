@@ -7,8 +7,8 @@ set -o pipefail
 ###
 ### Default user/group id
 ###
-MY_UID=1000
-MY_GID=1000
+MY_UID=101
+MY_GID=101
 
 if env | grep '^NEW_UID='; then
 	MY_UID="$( env | grep '^NEW_UID=' | sed 's/^NEW_UID=//g' )"
@@ -16,7 +16,12 @@ fi
 if env | grep '^NEW_GID='; then
 	MY_GID="$( env | grep '^NEW_GID=' | sed 's/^NEW_GID=//g' )"
 fi
-chown "${MY_UID}:${MY_GID}" /etc/varnish.d
+
+###
+### Change uid/gid
+###
+usermod -u "$MY_UID" "varnish"
+groupmod -g "$MY_GID" "varnish"
 
 
 ###
